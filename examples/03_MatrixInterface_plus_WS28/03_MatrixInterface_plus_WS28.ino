@@ -54,6 +54,7 @@ void setup() {
 long t = millis();
 long lastButtonReadout = millis();
 int currentMode = 2;
+uint8_t selectedFunction = 0;
 bool playing = true;
 
 void loop() {
@@ -127,6 +128,7 @@ void handler_FunctionButtons(bool _state, uint8_t _button){
   } else {
     Serial.println("released");
   }
+  selectedFunction = _button;
 }
 
 void handler_SnapshotButtons(bool _state, uint8_t _button){
