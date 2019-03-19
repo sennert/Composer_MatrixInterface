@@ -1,5 +1,3 @@
-//#include <Wire.h>
-#include <Adafruit_NeoPixel_ZeroDMA.h>
 #include <Composer_MatrixInterface.h>
 
 /////////////////////////////////////////////////////////////////
@@ -10,12 +8,6 @@ MATRIX_INTERFACE interface;
 
 /////////////////////////////////////////////////////////////////
 
-#define WS28_PIN  A3
-#define NUM_LEDS 252
-#define MATRIX_FRAMERATE 20
-Adafruit_NeoPixel_ZeroDMA rgb_leds(NUM_LEDS, WS28_PIN, NEO_GRB);
-
-/////////////////////////////////////////////////////////////////////////////////
 
 void setup() {
   
@@ -35,24 +27,13 @@ void setup() {
   interface.attachHandler_SnapshotButtons(handler_SnapshotButtons);
   interface.attachHandler_ModeButtons(handler_ModeButtons);
 
-  rgb_leds.begin();  
-  rgb_leds.setBrightness(35);
-  rgb_leds.show();
-  delay(100);
-  drawLogo();
-  rgb_leds.show();
-  delay(1000);
-
   digitalWrite(LED_BUILTIN, LOW);   // turn the LED off
-  turnAllLEDsOff();
-  rgb_leds.show();
 }
 
 /////////////////////////////////////////////////////////////////
 
 long t = millis();
 long lastButtonReadout = millis();
-int currentMode = 2;
 bool playing = true;
 
 void loop() {
@@ -62,11 +43,10 @@ void loop() {
   if (digitalRead(TCA9555_INT_PIN) == 0) {
     digitalWrite(LED_BUILTIN, HIGH);   // turn the LED on (HIGH is the voltage level)
     interface.read_IO_Expander(t);
-    lastButtonReadout = t;
+//    lastButtonReadout = t;
   } else {  
     digitalWrite(LED_BUILTIN, LOW); 
   }
-  updateMatrixLEDs(t);
 }
 
 /////////////////////////////////////////////////////////////////
@@ -150,5 +130,4 @@ void handler_ModeButtons(bool _state, uint8_t _button){
   } else {
     Serial.println("released");
   }
-  currentMode = _button;
 }
